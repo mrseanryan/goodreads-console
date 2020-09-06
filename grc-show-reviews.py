@@ -48,7 +48,7 @@ def reduce_review(review):
     # TODO refactor via 'select' or 'map'
     return {
         'title': review['book']['title'],
-        # TODO isbn: need to lookup and convert to a real ISBN (some books do not have one!)
+        # TODO isbn: need to lookup and convert to a real ISBN (some books do not have one!) - or 'isbn13'
         'isbn-id': review['book']['isbn'],
         'gr_id': review['book']['id']['#text'],
         'link': review['link'],
@@ -57,6 +57,9 @@ def reduce_review(review):
         'date_added': parse_date(review['date_added']),
         'date_updated': parse_date(review['date_updated']),
         'rating': review['rating']
+        # TODO add - review['book']['publication_year']
+        # TODO add - review['book']['authors']
+        # TODO add - review['book']['average_rating']
     }
 
 
