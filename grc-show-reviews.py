@@ -9,6 +9,9 @@ import requests
 import time
 import xmltodict
 
+# A character that is unlikely to appear inside a book review text.
+CSV_SEPARATOR = "_"
+
 
 def read_file(filename):
     f = open(filename, "r")
@@ -43,12 +46,17 @@ def parse_date(date_time_str):
 
 def reduce_review(review):
     # TODO refactor via 'select' or 'map'
-    return {'link': review['link'], 'body': review['body'],
-            'read_count': review['read_count'],
-            'date_added': parse_date(review['date_added']),
-            'date_updated': parse_date(review['date_updated']),
-            'rating': review['rating']
-            }
+    return {
+        'title': review['book']['title'],
+        'isbn': review['book']['isbn'],
+        'gr_id': review['book']['id']['#text'],
+        'link': review['link'],
+        'body': review['body'],
+        'read_count': review['read_count'],
+        'date_added': parse_date(review['date_added']),
+        'date_updated': parse_date(review['date_updated']),
+        'rating': review['rating']
+    }
 
 
 def has_review_a_body(review):
@@ -65,33 +73,46 @@ def date_to_ymd_format(dest_date):
 
 def print_csv_header():
     print('#',
+          'title',
+          CSV_SEPARATOR,
+          'isbn',
+          CSV_SEPARATOR,
+          'gr-id',
+          CSV_SEPARATOR,
           'link',
-          ",",
+          CSV_SEPARATOR,
           'body',
-          ",",
-          'read_count',
-          ",",
-          'date_added',
-          ",",
-          'date_updated',
-          ",",
+          CSV_SEPARATOR,
+          'read-count',
+          CSV_SEPARATOR,
+          'date-added',
+          CSV_SEPARATOR,
+          'date-updated',
+          CSV_SEPARATOR,
           'rating'
           )
 
 
 def print_review_csv(review):
-    print(review['link'],
-          ",",
-          review['body'],
-          ",",
-          review['read_count'],
-          ",",
-          date_to_ymd_format(review['date_added']),
-          ",",
-          date_to_ymd_format(review['date_updated']),
-          ",",
-          review['rating']
-          )
+    print(
+        review['title'],
+        CSV_SEPARATOR,
+        review['isbn'],
+        CSV_SEPARATOR,
+        review['gr_id'],
+        CSV_SEPARATOR,
+        review['link'],
+        CSV_SEPARATOR,
+        review['body'],
+        CSV_SEPARATOR,
+        review['read_count'],
+        CSV_SEPARATOR,
+        date_to_ymd_format(review['date_added']),
+        CSV_SEPARATOR,
+        date_to_ymd_format(review['date_updated']),
+        CSV_SEPARATOR,
+        review['rating']
+    )
 
 
 has_review = True
