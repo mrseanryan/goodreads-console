@@ -42,11 +42,12 @@ def parse_date(date_time_str):
 
 
 def reduce_review(review):
+    # TODO refactor via 'select' or 'map'
     return {'link': review['link'], 'body': review['body'],
             'read_count': review['read_count'],
             'date_added': parse_date(review['date_added']),
-            'date_updated': parse_date(review['date_updated'])
-            # TODO add rating
+            'date_updated': parse_date(review['date_updated']),
+            'rating': review['rating']
             }
 
 
@@ -62,6 +63,22 @@ def date_to_ymd_format(dest_date):
     return dest_date.strftime('%Y-%m-%d')
 
 
+def print_csv_header():
+    print('#',
+          'link',
+          ",",
+          'body',
+          ",",
+          'read_count',
+          ",",
+          'date_added',
+          ",",
+          'date_updated',
+          ",",
+          'rating'
+          )
+
+
 def print_review_csv(review):
     print(review['link'],
           ",",
@@ -71,8 +88,9 @@ def print_review_csv(review):
           ",",
           date_to_ymd_format(review['date_added']),
           ",",
-          date_to_ymd_format(review['date_updated'])
-          # TODO add rating
+          date_to_ymd_format(review['date_updated']),
+          ",",
+          review['rating']
           )
 
 
@@ -107,6 +125,8 @@ while has_review:
 reviews = sorted(
     reviews, key=lambda r: r['date_updated'])
 
-print(f"Found {len(reviews)} book reviews")
+print(f"# Found {len(reviews)} book reviews")
+
+print_csv_header()
 
 list(map(lambda x: print_review_csv(x), reviews))
