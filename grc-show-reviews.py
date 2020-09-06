@@ -48,7 +48,8 @@ def reduce_review(review):
     # TODO refactor via 'select' or 'map'
     return {
         'title': review['book']['title'],
-        'isbn': review['book']['isbn'],
+        # TODO isbn: need to lookup and convert to a real ISBN (some books do not have one!)
+        'isbn-id': review['book']['isbn'],
         'gr_id': review['book']['id']['#text'],
         'link': review['link'],
         'body': review['body'],
@@ -75,8 +76,8 @@ def print_csv_header():
     print('#',
           'title',
           CSV_SEPARATOR,
-          'isbn',
-          CSV_SEPARATOR,
+          #   'isbn',
+          #   CSV_SEPARATOR,
           'gr-id',
           CSV_SEPARATOR,
           'link',
@@ -97,8 +98,8 @@ def print_review_csv(review):
     print(
         review['title'],
         CSV_SEPARATOR,
-        review['isbn'],
-        CSV_SEPARATOR,
+        # review['isbn'],
+        # CSV_SEPARATOR,
         review['gr_id'],
         CSV_SEPARATOR,
         review['link'],
