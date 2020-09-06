@@ -34,14 +34,13 @@ def get_oath_token_secret():
     return read_file("oath.token-secret.credentials.txt")
 
 
-def print_review(review):
-    reduced_review = {'link': review['link'], 'body': review['body'],
-                      'read_count': review['read_count'],
-                      'date_added': review['date_added'],
-                      'date_updated': review['date_updated']
-                      # TODO add rating
-                      }
-    print(reduced_review)
+def reduce_review(review):
+    return {'link': review['link'], 'body': review['body'],
+            'read_count': review['read_count'],
+            'date_added': review['date_added'],
+            'date_updated': review['date_updated']
+            # TODO add rating
+            }
 
 
 def has_review_a_body(review):
@@ -52,8 +51,24 @@ def has_review_no_body(review):
     return review['body'] is None
 
 
+def print_review_csv(review):
+    print(review['link'],
+          ",",
+          review['body'],
+          ",",
+          review['read_count'],
+          ",",
+          review['date_added'],
+          ",",
+          review['date_updated']
+          # TODO add rating
+          )
+
+
 has_review = True
 page = 1
+
+reviews = []
 
 while has_review:
     # https://www.goodreads.com/api/index#reviews.list
@@ -65,7 +80,9 @@ while has_review:
 
     book_reviews_filtered = list(filter(has_review_a_body, book_reviews))
 
-    list(map(lambda x: print_review(x), book_reviews_filtered))
+    new_reviews = list(map(lambda x: reduce_review(x), book_reviews_filtered))
+
+    reviews = reviews + new_reviews
 
     # until hit a book that has no review
     book_reviews_no_body = list(filter(has_review_no_body, book_reviews))
@@ -77,4 +94,6 @@ while has_review:
         time.sleep(1.1)
 
 
-# TODO - output in CSV format
+print(f"Found {len(reviews)} book reviews")
+
+list(map(lambda x: print_review_csv(x), reviews))
