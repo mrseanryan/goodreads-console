@@ -5,7 +5,7 @@ A simple console for retrieving data from Goodreads.
 ## Usage
 
 ```
-grc get-reviews {user-id}
+grc-show-reviews.py
 ```
 
 ## Setup
@@ -25,6 +25,14 @@ key.credentials.txt
 ```
 secret.credentials.txt
 ```
+
+3. Save your user id to this file:
+
+```
+user-id.credentials.txt
+```
+
+tip: to get your user id, go to https://www.goodreads.com/ then click on **My Books**. You will see the user id in the URL.
 
 3. Install Python 3.7.x and pip
 
